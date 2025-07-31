@@ -118,6 +118,10 @@
                 // Updated pattern to handle both "AA1" and "Q1_1" formats
                 const pattern = /^([a-zA-Z_]+[a-zA-Z]?)(?:\d+|_\d+)$/;
                 for (const header of CredamoAnalysisHelper.Data.csvHeaders) {
+                    // Skip single question variables like "Q1", "Q2", "Q3" as they are not scales
+                    if (/^Q\d+$/.test(header)) {
+                        continue;
+                    }
                     const match = header.match(pattern);
                     if (match) {
                         let prefix = match[1];
