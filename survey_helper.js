@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Credamo分析助手 V8.1 本地版
+// @name         问卷分析助手
 // @namespace    http://tampermonkey.net/
-// @version      8.0.0
-// @description  【V8.0 修复注入 & 新增联动】修复了在新版Credamo页面不显示的问题；增加了发送数据到DataPLS的功能。
+// @version      1.0.0
+// @description  
 // @author       Gemini-Pro & Your-Name
 // @match        https://www.credamo.com/survey.html*
 // @grant        none
