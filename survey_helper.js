@@ -6,6 +6,7 @@
 // @author       Gemini-Pro & Your-Name
 // @match        https://www.credamo.com/survey.html*
 // @grant        none
+// @license MIT
 // @run-at       document-start
 // ==/UserScript==
 
@@ -101,7 +102,7 @@
                 variance: (arr) => {
                     if (!arr || arr.length < 2) return 0;
                     const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
-                    return arr.reduce((a, b) => a + (b - mean) ** 2, 0) / arr.length;
+                    return arr.reduce((a, b) => a + (b - mean) ** 2, 0) / (arr.length - 1);
                 },
                 pearson: (arrX, arrY) => {
                     if (arrX.length !== arrY.length || arrX.length === 0) { return NaN; }
@@ -120,6 +121,10 @@
                 for (const header of CredamoAnalysisHelper.Data.csvHeaders) {
                     // Skip single question variables like "Q1", "Q2", "Q3" as they are not scales
                     if (/^Q\d+$/.test(header)) {
+                        continue;
+                    }
+                    // Skip reverse coded variables (starting with "r_") for validity analysis
+                    if (header.startsWith('r_')) {
                         continue;
                     }
                     const match = header.match(pattern);
@@ -346,6 +351,38 @@
                             }
                             sortPriority = Math.min(sortPriority, 4);
                             sampleStdDev = stdDev;
+                        }
+                    }
+
+                    // 检查每个潜变量下观察变量的标准差
+                    for (const dim in dimensions) {
+                        const dimItems = dimensions[dim];
+                        if (dimItems.length >= 3) {
+                            const dimValues = dimItems.map(item => parseFloat(row[item])).filter(v => !isNaN(v));
+                            if (dimValues.length >= 3) {
+                                const dimStdDev = Math.sqrt(this.stats.variance(dimValues));
+                                if (dimStdDev >= 2.0) {
+                                    // 检查是否存在反向编码变量
+                                    const hasReverseItems = CredamoAnalysisHelper.Data.csvHeaders.some(header => 
+                                        header.startsWith('r_') && dimItems.some(item => header === `r_${item}`)
+                                    );
+                                    
+                                    // 根据标准差大小设置颜色和样式
+                                    let stdStyle = 'color: #000;'; // 默认黑色，不加粗
+                                    if (dimStdDev > 3.0) {
+                                        stdStyle = 'color: #6a0dad; font-weight: bold;'; // 紫色加粗
+                                    } else if (dimStdDev > 2.5) {
+                                        stdStyle = 'color: #d9534f; font-weight: bold;'; // 红色加粗
+                                    }
+                                    
+                                    const dimNameDisplay = hasReverseItems ? `<span style="color: #d9534f; font-weight: bold;">${dim}</span>` : dim;
+                                    const stdDisplay = `<span style="${stdStyle}">${dimStdDev.toFixed(2)}</span>`;
+                                    neutralReasons.push(`潜变量${dimNameDisplay}观察变量标准差异常(SD=${stdDisplay})`);
+                                    if (badReasons.length === 0) {
+                                        sortPriority = Math.min(sortPriority, 6);
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -692,6 +729,7 @@
                                     <li><b>离散度阈值 (SD):</b> < ${thresholds.stdDev} (基于${thresholds.scaleType}点量表)，≤0.4标红</li>
                                     <li><b>连续答案阈值:</b> > ${thresholds.consecutive} 次</li>
                                     <li><b>平均分 Z-score 绝对值:</b> > ${thresholds.zScore}</li>
+                                    <li><b>潜变量标准差异常:</b> 每个潜变量下观察变量标准差 ≥ 2.0 (检测作答不一致性)</li>
                                 </ul>
                             </div>`;
                 if(abnormalSamples.length > 0) {
