@@ -2,7 +2,7 @@
 // @name         问卷分析助手
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0
-// @description  
+// @description  问卷数据分析助手，支持信度分析、效度分析、测量模型评估和异常样本检测
 // @author       Gemini-Pro & Your-Name
 // @match        https://www.credamo.com/survey.html*
 // @grant        none
