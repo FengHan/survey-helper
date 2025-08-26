@@ -3,13 +3,13 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## 项目概述
-
-这是一个用于Credamo问卷数据分析的油猴脚本(Tampermonkey userscript)。脚本在`https://www.credamo.com/survey.html*`页面上运行，为问卷回收数据提供统计分析功能。
+https://greasyfork.org/zh-CN/scripts/544184
+这是一个用于问卷数据分析的油猴脚本(Tampermonkey userscript)。脚本在`https://www.xxxxx.com/survey.html*`页面上运行，为问卷回收数据提供统计分析功能。
 
 ## 代码架构
 
 ### 单文件结构
-- `credamo_helper.js` - 包含所有功能的完整用户脚本
+- `survey_helper.js` - 包含所有功能的完整用户脚本
 
 ### 核心组件
 
@@ -55,6 +55,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 配置管理
 统计阈值集中在`CredamoAnalysisHelper.Config`中：
 - 信度阈值（克隆巴赫α）
+- 
 - 测量模型标准（CR、AVE、载荷）
 - 效度基准（HTMT）
 - 异常样本检测参数
