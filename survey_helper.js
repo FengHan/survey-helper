@@ -411,8 +411,8 @@
             // 【V8.0 新增】将目标域名提取到这里，方便修改
             // ===================================================================
             //TARGET_DOMAIN: 'http://localhost:3000', // <-- 用于本地开发
-           // TARGET_DOMAIN: 'https://datapls.netlify.app', // <-- 备用域名
-            TARGET_DOMAIN: 'https://datapls.top',    // <-- 用于线上生产环境
+            //TARGET_DOMAIN: 'https://datapls.netlify.app', // <-- 备用域名
+            TARGET_DOMAIN: 'https://datapls.fun',    // <-- 用于线上生产环境
             // ===================================================================
 
             elements: {},
