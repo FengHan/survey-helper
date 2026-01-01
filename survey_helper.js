@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         问卷分析助手
 // @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @version      1.0.1
 // @description  问卷数据分析助手，支持信度分析、效度分析、测量模型评估和异常样本检测
-// @author       Gemini-Pro & Your-Name
+// @author       Gemini-Pro & Feng Han
 // @match        https://www.credamo.com/survey.html*
 // @grant        none
 // @license MIT
@@ -412,7 +412,7 @@
             // ===================================================================
             //TARGET_DOMAIN: 'http://localhost:3000', // <-- 用于本地开发
             //TARGET_DOMAIN: 'https://datapls.netlify.app', // <-- 备用域名
-            TARGET_DOMAIN: 'https://datapls.fun',    // <-- 用于线上生产环境
+            TARGET_DOMAIN: 'https://datapls.fun',
             // ===================================================================
 
             elements: {},
