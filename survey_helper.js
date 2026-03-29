@@ -535,6 +535,34 @@
                 );
                 return '\uFEFF' + [csvHeaderRow, ...csvRows].join('\n');
             },
+            _generateScaleCsvContent: function() {
+                const data = CredamoAnalysisHelper.Data;
+                if (data.processedData.size === 0) {
+                    alert('没有可处理的数据！');
+                    return null;
+                }
+                const scalePattern = /^([a-zA-Z_]+[a-zA-Z]?)(?:\d+|_\d+)$/;
+                const singleQPattern = /^Q\d+$/;
+                const scaleHeaders = data.csvHeaders.filter(header =>
+                    scalePattern.test(header) && !singleQPattern.test(header)
+                );
+                if (scaleHeaders.length === 0) {
+                    alert('未找到量表题项！请确认题项命名符合 "字母+数字" 格式（如 A1、B2）。');
+                    return null;
+                }
+                const escapeCsvCell = (cell) => {
+                    const cellString = (cell === undefined || cell === null) ? '' : String(cell);
+                    if (/[",\n]/.test(cellString)) {
+                        return `"${cellString.replace(/"/g, '""')}"`;
+                    }
+                    return cellString;
+                };
+                const csvHeaderRow = scaleHeaders.join(',');
+                const csvRows = Array.from(data.processedData.values()).map(row =>
+                    scaleHeaders.map(header => escapeCsvCell(row[header])).join(',')
+                );
+                return '\uFEFF' + [csvHeaderRow, ...csvRows].join('\n');
+            },
             handleExportCsv: function() {
                 const csvContent = this._generateCsvContent();
                 if (!csvContent) return;
@@ -553,7 +581,7 @@
                 this._flashButton(this.elements.exportCsvButton, '✅ 导出成功!', '📊 导出Excel');
             },
             handleSendToDataPLS: function() {
-                const csvContent = this._generateCsvContent();
+                const csvContent = this._generateScaleCsvContent();
                 if (!csvContent) return;
 
                 const button = this.elements.sendToPlsButton;
