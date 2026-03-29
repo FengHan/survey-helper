@@ -581,7 +581,7 @@
                 this._flashButton(this.elements.exportCsvButton, '✅ 导出成功!', '📊 导出Excel');
             },
             handleSendToDataPLS: function() {
-                const csvContent = this._generateScaleCsvContent();
+                const csvContent = this._generateCsvContent();
                 if (!csvContent) return;
 
                 const button = this.elements.sendToPlsButton;
